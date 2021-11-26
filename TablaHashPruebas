@@ -1,0 +1,103 @@
+import java.util.Arrays;
+/**
+ * BadBunny beibe
+ */
+public class TablaHashPruebas
+{
+    //Constructor
+    String [] arreglo;
+    int tam;
+    int tam2;
+    //Dentro del constructor se crea un arreglo y se rellena con "-1"
+    public TablaHashPruebas(int tam){
+        this.tam = tam;
+        tam2 = tam-1;
+        arreglo = new String[tam];
+        Arrays.fill(arreglo, "-1");
+    }
+
+    /**
+     * @param cadenaArreglo Aqui ira la lista con los valores que queremos buscar
+     * @param arreglo la lista que se creó en el constructor que esta llena con "-1"
+     */
+    public void funcionHash(String [] cadenaArreglo, String [] arreglo){
+        int i;
+        for(i = 0; i < cadenaArreglo.length; i++){ //recorremos cadenaArreglo
+            String elemento = cadenaArreglo[i];
+            int indiceArreglo = Integer.parseInt(elemento)%tam2; //El indiced de ese elemento es el modulo del primer elemento de cadenaArreglo con el largo de la lista restandole 1
+            System.out.println("El indice es "+indiceArreglo+ " para el elemento "+elemento);
+            //Tratar Colisiones
+            while(arreglo[indiceArreglo]!= "-1"){
+                indiceArreglo++;
+                System.out.println("Ocurrio una colision en el indice " +(indiceArreglo-1)+" Cambiar al indice "+indiceArreglo);
+            }
+            arreglo[indiceArreglo] = elemento;
+        }
+    }
+    //Mostrar la tabla
+    public void mostrar(){
+        /**
+        for(int i = 0; i < tam; i++){
+            System.out.print(String.format("| %3s " + " ", arreglo[i]));
+        }
+        System.out.println();
+        */
+        int incremento = 0,i,j;
+        for(i = 0; i < 1; i++){
+            incremento += tam;
+            for(j = 0; j < 71; j++){
+                System.out.print("-");
+            }
+            System.out.println();
+            for(j = incremento - tam; j < incremento; j++){
+                System.out.format("| %3s " + " ", j);
+            }
+            System.out.println("|");
+            for(int n = 0; n < 71; n++){
+                System.out.print("-");
+            }
+            System.out.println();
+            for(j = incremento - tam; j < incremento; j++){
+                if (arreglo[j].equals("-1")){
+                    System.out.print("|     ");
+                }else{
+                    System.out.print(String.format("| %3s " + " ", arreglo[j]));
+                }
+            }
+            System.out.println("|");
+            for(j=0;j<71;j++){
+                System.out.print("-");
+            }
+            System.out.println();
+        }
+    }
+    //Metodo para buscar clave
+    public String buscarClave(String elemento){
+        int indiceArreglo = Integer.parseInt(elemento)%tam2;
+        int contador = 0;
+        while(arreglo[indiceArreglo]!="-1"){
+            if(arreglo[indiceArreglo] == elemento){
+                System.out.println("El elemento "+ elemento+" fue encontrado en el indice "+indiceArreglo);
+                return arreglo[indiceArreglo];
+            }else{
+                indiceArreglo++;
+                contador++;
+                if(contador > tam2){
+                    break;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static void main(String [] args){
+        TablaHashPruebas hash = new TablaHashPruebas(10);
+        String [] elementos = {"20","33","21","10","12","14","56","100","45","69"};
+        hash.funcionHash(elementos, hash.arreglo);
+        hash.mostrar();
+        String buscado = hash.buscarClave("33");
+        if(buscado == null){
+            System.out.println("El elemento 33 no se encuentra en la tabla");
+        }
+    }
+}
